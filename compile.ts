@@ -1,21 +1,30 @@
-import { CompileFailedError, CompileResult, compileSol } from "solc-typed-ast";
+// @ts-ignore
+import solc from 'solc';
 import fs from 'fs';
+import path from "path";
 
+const inboxContractPath = path.resolve(__dirname, 'contracts', 'Lottery.sol');
+const contractSource = fs.readFileSync(inboxContractPath, 'utf8');
 
-const compile = async () => {
-  const contractPath = './contracts/Lottery.sol';
-  const contractName = 'Lottery';
+const input = {
+  language: 'Solidity',
+  sources: {
+    'Lottery.sol': {
+      content: contractSource,
+    }
+  },
+  settings: {
+    outputSelection: {
+      '*': {
+        '*': ['*']
+      }
+    }
+  }
+};
 
-  const result = await compileSol(contractPath, 'auto', );
-  const contractData = result.data.contracts[contractPath][contractName];
+const output = JSON.parse(solc.compile(JSON.stringify(input)));
 
-  const abi = contractData.abi;
-  const bytecode = contractData.evm.bytecode.object;
+export const abi = output.contracts['Lottery.sol']['Lottery'].abi
+export const bytecode = output.contracts['Lottery.sol']['Lottery'].evm.bytecode.object
 
-  //Writing to file
-  fs.writeFileSync('./metadata/abi.json', JSON.stringify(abi));
-
-  // console.log(Object.keys(contractData));
-}
-
-void compile();
+fs.writeFileSync('./metadata/abi.json', JSON.stringify(abi));

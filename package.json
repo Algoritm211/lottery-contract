@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "gen:types": "abi-types-generator ./metadata/abi.json --name=contractTypes",
-    "compile": "ts-node compile.ts && npm run gen:types",
+    "compile": "node --loader ts-node/esm --experimental-specifier-resolution node compile.ts && npm run gen:types",
     "test": "jest"
   },
   "author": "",
@@ -15,7 +15,8 @@
     "ganache": "^7.1.0",
     "solc": "^0.8.13",
     "solc-typed-ast": "^10.0.0",
-    "web3": "^1.7.3"
+    "web3": "^1.7.3",
+    "web3-eth-contract": "^1.7.3"
   },
   "devDependencies": {
     "@types/jest": "^27.4.0",
