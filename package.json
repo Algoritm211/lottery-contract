@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "gen:types": "abi-types-generator ./metadata/abi.json --name=contractTypes",
+    "compile": "ts-node compile.ts && npm run gen:types",
     "test": "jest"
   },
   "author": "",
@@ -12,9 +14,15 @@
     "@truffle/hdwallet-provider": "^2.0.8",
     "ganache": "^7.1.0",
     "solc": "^0.8.13",
+    "solc-typed-ast": "^10.0.0",
     "web3": "^1.7.3"
   },
   "devDependencies": {
-    "jest": "^28.1.0"
+    "@types/jest": "^27.4.0",
+    "ethereum-abi-types-generator": "^1.3.2",
+    "jest": "^27.4.7",
+    "ts-jest": "^27.1.3",
+    "ts-node": "^10.5.0",
+    "typescript": "^4.5.4"
   }
 }
