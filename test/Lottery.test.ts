@@ -15,4 +15,9 @@ describe('Testing Lottery contract', () => {
       .deploy({data: bytecode})
       .send({from: accounts[0], gas: 1_000_000})
   })
+
+  it('Contract is deployed successfully', () => {
+    const deployedContract = lottery.options.address;
+    expect(deployedContract).toBeTruthy();
+  })
 })
