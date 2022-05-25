@@ -51,4 +51,13 @@ describe('Testing Lottery contract', () => {
     expect(players[2]).toBe(accounts[2]);
     expect(players.length).toBe(3);
   });
+
+  it('Enter validation works good (user can`t enter with less than 0.01 ETH)', async () => {
+    const errorEnterToLottery = () => lottery.methods.enter().send({
+      from: accounts[0],
+      value: web3.utils.toWei('0.0001', 'ether'),
+    })
+
+    await expect(errorEnterToLottery()).rejects.toThrowError();
+  });
 })
