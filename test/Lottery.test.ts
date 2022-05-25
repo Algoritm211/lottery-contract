@@ -20,4 +20,16 @@ describe('Testing Lottery contract', () => {
     const deployedContract = lottery.options.address;
     expect(deployedContract).toBeTruthy();
   })
+
+  it('One user can enter the contract', async () => {
+    await lottery.methods.enter().send({
+      from: accounts[0],
+      value: web3.utils.toWei('0.02', 'ether'),
+    })
+
+    const players = await lottery.methods.getPlayers().call();
+
+    expect(players[0]).toBe(accounts[0]);
+    expect(players.length).toBe(1);
+  });
 })
