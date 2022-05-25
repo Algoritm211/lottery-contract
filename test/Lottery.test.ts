@@ -8,7 +8,7 @@ describe('Testing Lottery contract', () => {
   let lottery: Contract;
   let accounts: string[];
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     accounts = await web3.eth.getAccounts();
 
     lottery = await new web3.eth.Contract(abi)
@@ -31,5 +31,24 @@ describe('Testing Lottery contract', () => {
 
     expect(players[0]).toBe(accounts[0]);
     expect(players.length).toBe(1);
+  });
+
+  it('Allow multiple accounts to enter', async () => {
+    const getSendConfig = (account: string) => {
+      return {
+        from: account,
+        value: web3.utils.toWei('0.02', 'ether'),
+      }
+    }
+    await lottery.methods.enter().send(getSendConfig(accounts[0]))
+    await lottery.methods.enter().send(getSendConfig(accounts[1]))
+    await lottery.methods.enter().send(getSendConfig(accounts[2]))
+
+    const players = await lottery.methods.getPlayers().call();
+
+    expect(players[0]).toBe(accounts[0]);
+    expect(players[1]).toBe(accounts[1]);
+    expect(players[2]).toBe(accounts[2]);
+    expect(players.length).toBe(3);
   });
 })
