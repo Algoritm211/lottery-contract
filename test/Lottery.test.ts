@@ -60,4 +60,18 @@ describe('Testing Lottery contract', () => {
 
     await expect(errorEnterToLottery()).rejects.toThrowError();
   });
+
+  it('Only manager can pick winner', async () => {
+    // Make at least one user in lottery
+    await lottery.methods.enter().send({
+      from: accounts[5],
+      value: web3.utils.toWei('0.02', 'ether'),
+    })
+
+    const pickWinnerFromAnotherAccount = () => lottery.methods.pickWinner().send({
+      from: accounts[1],
+    })
+    await expect(pickWinnerFromAnotherAccount()).rejects.toThrowError();
+  });
+
 })
