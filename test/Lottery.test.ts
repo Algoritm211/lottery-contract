@@ -74,4 +74,22 @@ describe('Testing Lottery contract', () => {
     await expect(pickWinnerFromAnotherAccount()).rejects.toThrowError();
   });
 
+  it('Send money to winner, clear players array and contract balance', async () => {
+    await lottery.methods.enter().send({
+      from: accounts[0],
+      value: web3.utils.toWei('10', 'ether'),
+    })
+
+    const balanceAfterEntry = await web3.eth.getBalance(accounts[0]);
+    await lottery.methods.pickWinner().send({from: accounts[0]});
+    const balanceAfterWin = await web3.eth.getBalance(accounts[0]);
+
+    const difference = Number(balanceAfterWin) - Number(balanceAfterEntry);
+    const players = await lottery.methods.getPlayers().call()
+    const contractBalance = Number(await web3.eth.getBalance(lottery.options.address));
+
+    expect(difference).toBeGreaterThan(9.8);
+    expect(players.length).toBe(0);
+    expect(contractBalance).toBe(0);
+  });
 })
