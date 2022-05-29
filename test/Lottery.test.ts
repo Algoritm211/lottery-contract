@@ -88,7 +88,7 @@ describe('Testing Lottery contract', () => {
     const players = await lottery.methods.getPlayers().call()
     const contractBalance = Number(await web3.eth.getBalance(lottery.options.address));
 
-    expect(difference).toBeGreaterThan(9.8);
+    expect(difference).toBeGreaterThan(+web3.utils.toWei('9.8', 'ether'));
     expect(players.length).toBe(0);
     expect(contractBalance).toBe(0);
   });
